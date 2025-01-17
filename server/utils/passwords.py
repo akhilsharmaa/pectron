@@ -1,9 +1,8 @@
-from passlib.context import CryptContext
+
 import jwt
 from datetime import datetime, timedelta, timezone
-from ..config import JWT_SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from ..config import JWT_SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, pwd_context
+from fastapi import Depends
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)

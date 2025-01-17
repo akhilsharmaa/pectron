@@ -1,23 +1,26 @@
 import jwt
+from pydantic import BaseModel 
 from fastapi import Depends, FastAPI, HTTPException, status
 from jwt.exceptions import InvalidTokenError
-from ..config import JWT_SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
-from ..models.token import TokenData
-from server.models.users import Users
-from typing import Annotated
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from ..config import fake_users_db
+from ..config import oauth2_scheme, JWT_SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, pwd_context
+from server.models.users import Users 
+from ..services.database import db_dependency, get_db
+from ..utils.passwords import verify_password
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return Users(**user_dict)
+    
+def get_user(username: str, db: db_dependency):
+    return db.query(Users).filter(Users.username == username).first()
 
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+def authenticate_user(db: db_dependency, username: str, password: str): 
+    user = get_user(username, db=db); 
+    if not user: 
+        return False; 
+    if not verify_password(password, user.password):
+            return False
+    return user
+    
+def get_current_user(token: str = Depends(oauth2_scheme)): 
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -31,7 +34,8 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         token_data = TokenData(username=username)
     except InvalidTokenError:
         raise credentials_exception
-    user = get_user(fake_users_db, username=token_data.username)
+    user = get_user(email=token_data.email)
     if user is None:
-        raise credentials_exception 
+        raise credentials_exception
     return user
+ 

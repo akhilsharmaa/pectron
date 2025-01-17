@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.exc import IntegrityError
 from ..services.database import db_dependency
 from ..models.users import Users
+from ..utils.passwords import get_password_hash
 
 router = APIRouter(
     prefix="/users",
@@ -14,6 +15,7 @@ router = APIRouter(
 
 
 class UserBase(BaseModel): 
+    username: str
     email: str
     first_name: str
     last_name: str
@@ -24,10 +26,11 @@ class UserBase(BaseModel):
 async def create_user(user: UserBase, db: db_dependency):
     
     db_user = Users( 
+            username=user.username,
             email=user.email,
             first_name=user.first_name, 
             last_name=user.last_name, 
-            password=user.password, 
+            password=get_password_hash(user.password), 
         )
 
     try:
@@ -37,8 +40,8 @@ async def create_user(user: UserBase, db: db_dependency):
         db.refresh(db_user)
 
         return {
-            "message": "User registered successfully.",
-            "user_id": db_user.id,
+            "message": "User registered successfully.", 
+            "username": db_user.username,
             "email": db_user.email
         }
 

@@ -4,7 +4,8 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 
 class Users(Base):
     __tablename__ = "users"  
-    email = Column(String, primary_key=True, unique=True)
+    username = Column(String, primary_key=True, unique=True)
+    email = Column(String)
     first_name = Column(String)
     last_name = Column(String)
     password = Column(String)
