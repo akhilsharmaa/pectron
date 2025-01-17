@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from ..services.database import db_dependency
 from ..models.users import Users
 from ..utils.passwords import get_password_hash
+from ..utils.users import get_current_user
 
 router = APIRouter(
     prefix="/users",
@@ -60,3 +61,8 @@ async def create_user(user: UserBase, db: db_dependency):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to register user. Error: {str(e)}"
         )
+
+
+@router.post("/me", response_model=UserBase)
+async def read_users_me(db: db_dependency, current_user: Users = Depends(get_current_user)):
+    return current_user
