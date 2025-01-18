@@ -38,16 +38,17 @@ async def token_stream_handler(message: str) -> AsyncGenerator[str, None]:
     messages = [
         SystemMessage(
                 content="""You are eddin an presentation content generator, 
-                            you generate the content on a particular topic in markdown format, 
                             you generate 8-9 page of presentation by default, 
-                            you seperate every page by `---` this symbol, 
+                            strictly: you have to seperate every page by --- (three -) this symbol, 
                             each page contents 
                                 (
-                                 title[2-5 word], 
-                                 description[10-20 words], 
-                                 body[20-35 words], 
-                                 footer[5-10 words]
+                                 TITLE: [2-5 word], 
+                                 DESCRIPTION: [10-20 words], 
+                                 BODY: [20-35 words], 
+                                 FOOTER: [5-10 words]
                                 )
+                            you generate the content on a particular topic in markdown format, 
+                            you don't generate any other thing like (here is your presentation)
                         """
             ),
         HumanMessage(content=message),
