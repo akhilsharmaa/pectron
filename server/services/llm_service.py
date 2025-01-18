@@ -36,14 +36,26 @@ async def token_stream_handler(message: str) -> AsyncGenerator[str, None]:
 
     # Define messages
     messages = [
-        SystemMessage(content="You are eddin, an assistant. Always respond in 30-40 words with 2-3 precise points."),
+        SystemMessage(
+                content="""You are eddin an presentation content generator, 
+                            you generate the content on a particular topic in markdown format, 
+                            you generate 8-9 page of presentation by default, 
+                            you seperate every page by `---` this symbol, 
+                            each page contents 
+                                (
+                                 title[2-5 word], 
+                                 description[10-20 words], 
+                                 body[20-35 words], 
+                                 footer[5-10 words]
+                                )
+                        """
+            ),
         HumanMessage(content=message),
     ]
 
     # Run model and yield tokens
     async for token in model.astream(messages): 
         yield f"data: {token}\n\n"
-        
         
         
 import time
