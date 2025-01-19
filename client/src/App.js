@@ -1,34 +1,77 @@
 import React, { useState } from "react";
-import { createRoot } from "react-dom/client";
 
 const App = () => {
   const [question, setQuestion] = useState(""); // State for user input
-  const [responseText, setResponseText] = useState(""); // State to hold the streamed response
-  const [isGenerating, setIsGenerating] = useState(false); // State to hold the streamed response
+  const [components, setComponents] = useState([]); // Array to hold dynamic components
+  const [isGenerating, setIsGenerating] = useState(false); // State to disable button while generating
 
-  // Function to handle button click and initiate SSE connection
-  const handleAsk = () => {
+  // Function to add a new text component
+  const addTextComponent = (text) => {
+    const newComponent = (
+      <div key={`text-${components.length}`} className="dynamic-component">
+        <p>{text}</p>
+      </div>
+    );
+    setComponents((prev) => [...prev, newComponent]);
+  };
+
+  const getLastThreeSubstring = (str) => {
+      return str.substring(str.length-3, str.length); 
+  }
+
+  // Function to add a divider component
+  const addDivider = () => {
+    const newComponent = <hr key={`divider-${components.length}`} />;
+    setComponents((prev) => [...prev, newComponent]);
+  };
+
+  let paragraph = ""; // Temporary variable to store streaming paragraph
+
+  // Function to handle the "Ask" button click
+  const handleAsk = () => { 
+
     if (!question.trim()) {
       alert("Please enter a question.");
       return;
-    }
+    } 
 
-    setIsGenerating(true);
-    setResponseText(""); // Clear the previous response
-    const eventSource = new EventSource(`http://localhost:8000/llm/ask?question=${encodeURIComponent(question)}`);
+    setIsGenerating(true); // Disable button
+    setComponents([]); // Clear previous components
+
+    const eventSource = new EventSource(
+      `http://localhost:8000/llm/ask?question=${encodeURIComponent(question)}`
+    );
 
     // Listen for messages from the server
     eventSource.onmessage = (event) => {
-      setResponseText((prev) => prev + event.data); // Append the new data to the existing text
+      const token = event.data; // Current token sent by the server
+
+
+      // console.log(paragraph.substring(-10, 2));
+      const command = getLastThreeSubstring(paragraph); 
+      console.log(paragraph);
+      
+
+      if (command === "---") {
+        addDivider(); // Add a divider when "---" is received
+      } else if (command === "SSS") {
+        paragraph = "";  
+      } else if (command === "EEE") {
+        addTextComponent(paragraph);  
+        paragraph = ""; // Reset paragraph for a new block
+      } 
+      
+      paragraph += token; 
     };
 
-    // Handle errors (optional)
+    // Handle errors
     eventSource.onerror = () => {
       console.error("Error with the SSE connection.");
+      setIsGenerating(false);
       eventSource.close();
     };
 
-    // Close connection when response is complete (optional if server sends "done" messages)
+    // Close connection when component unmounts
     return () => {
       eventSource.close();
     };
@@ -44,10 +87,12 @@ const App = () => {
         onChange={(e) => setQuestion(e.target.value)}
         style={{ marginRight: "10px", width: "300px" }}
       />
-      {!isGenerating && <button onClick={handleAsk}>Ask</button>}
-      <div style={{ marginTop: "20px", whiteSpace: "pre-wrap" }}>
+      <button onClick={handleAsk} disabled={isGenerating}>
+        {isGenerating ? "Generating..." : "Ask"}
+      </button>
+      <div style={{ marginTop: "20px" }}>
         <h2>Response:</h2>
-        <p>{responseText}</p>
+        <div className="components-container">{components}</div>
       </div>
     </div>
   );

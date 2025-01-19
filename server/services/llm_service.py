@@ -39,7 +39,8 @@ async def token_stream_handler(message: str) -> AsyncGenerator[str, None]:
         SystemMessage(
                 content="""You are eddin an presentation content generator, 
                             you generate 8-9 page of presentation by default, 
-                            strictly: you have to seperate every page by --- (three -) this symbol, 
+                            strictly: you have to add --- (three -) in start of every page by, 
+                            (this will help me to understand that new page is starting,  
                             each page contents 
                                 (
                                  TITLE: [2-5 word], 
@@ -52,14 +53,15 @@ async def token_stream_handler(message: str) -> AsyncGenerator[str, None]:
                             here is a example of how you will generate content: 
                             
                             --- 
-                            PAGE: #start [X of Y pages] #end 
-                            TITLE: #start [this is example title] #end 
-                            DESCRIPTION: #start [This is the short decription] #end  
-                            BODY: #start [this is the body of the **content** which will be in markdown format] #end
-                            FOOTER: #start [this is short footer which includes the text which supports the description] #end
-                            --- 
+                            PAGE: SSS <page nunmber> EEE 
+                            TITLE: SSS <this is example title> EEE 
+                            DESCRIPTION: SSS <This is the short decription> EEE  
+                            BODY: SSS <this is the body of the **content** which will be in markdown format> EEE
+                            FOOTER: SSS <this is short footer which includes the text which supports the description> EEE
                             
-                            also make sure to add '#start ' and '#end ' on every component.  
+                            also make sure to add: 
+                                - 'SSS' starting of every component 
+                                - 'EEE' at end of every component.
                         """
             ),
         HumanMessage(content=message),
