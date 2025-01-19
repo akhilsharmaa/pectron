@@ -48,7 +48,7 @@ const App = () => {
                       backgroundColor="000sdd">
                         <Layer>
                             <Text 
-                              text={paragraph}>
+                              text={currentParagraph}>
                             </Text> 
                         </Layer>
                 </Stage>
@@ -57,8 +57,8 @@ const App = () => {
       setComponents((prev) => [...prev, newComponent]);
       keyCounter += 1; // Increment the counter
   }
-
-  let paragraph = ""; // Temporary variable to store streaming paragraph
+ 
+  var canAddNewPage = true; 
 
   // Function to handle the "Ask" button click
   const handleAsk = () => { 
@@ -78,19 +78,25 @@ const App = () => {
     // Listen for messages from the server
     eventSource.onmessage = (event) => {
           const token = event.data; // Current token sent by the server
-          console.log(token);
+          // console.log(token);
            
           setCurrentParagraph((prevParagraph) => {
               const updatedParagraph = prevParagraph + token;
 
               const command = getLastThreeSubstring(updatedParagraph); 
 
-              if (command === "---" && token !== "") {
+              if (command === "---" && canAddNewPage) {
                 addNewStageComponent(); // Add a new stage component when "---" is received
+                console.log("token: ", token);
+                console.log("command: ", command);
+                console.log("updatedParagraph: ", updatedParagraph);
+                canAddNewPage = false; 
+
               } else if (command === "SSS") {
                 return ""; // Reset paragraph for a new block
               } else if (command === "EEE") {
                 addTextComponent("");
+                canAddNewPage = true;
                 return ""; // Reset paragraph for a new block
               }
 
