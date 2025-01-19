@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { Stage, Layer, Star, Text } from 'react-konva';
+
+const CANVAS_HEIGHT = 1080/3; 
+const CANVAS_WIDTH  = 1920/3; 
 
 const App = () => {
   const [question, setQuestion] = useState(""); // State for user input
@@ -24,6 +28,26 @@ const App = () => {
     const newComponent = <hr key={`divider-${components.length}`} />;
     setComponents((prev) => [...prev, newComponent]);
   };
+
+  const addNewStageComponent = () => {
+    
+      const newComponent = (
+            <div key={`divider-${components.length}`} 
+                className="stage-canvas"> 
+                <Stage 
+                      width={CANVAS_WIDTH} 
+                      height={CANVAS_HEIGHT}
+                      backgroundColor="000sdd">
+                        <Layer>
+                            <Text 
+                              text={paragraph}>
+                            </Text> 
+                        </Layer>
+                </Stage>
+            </div>)
+
+      setComponents((prev) => [...prev, newComponent]);
+  }
 
   let paragraph = ""; // Temporary variable to store streaming paragraph
 
@@ -53,7 +77,8 @@ const App = () => {
       
 
       if (command === "---") {
-        addDivider(); // Add a divider when "---" is received
+        // addDivider(); // Add a divider when "---" is received
+        addNewStageComponent();
       } else if (command === "SSS") {
         paragraph = "";  
       } else if (command === "EEE") {
@@ -94,6 +119,21 @@ const App = () => {
         <h2>Response:</h2>
         <div className="components-container">{components}</div>
       </div>
+
+
+      {/* <div className="stage-canvas"> 
+        <Stage width={CANVAS_WIDTH}
+              height={CANVAS_HEIGHT}
+              backgroundColor="000sdd">
+                <Layer>
+                  <Text 
+                      text="Try to drag a star"
+                      draggable="true" />
+                </Layer>
+        </Stage>
+      </div> */}
+
+ 
     </div>
   );
 };
