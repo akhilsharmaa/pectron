@@ -49,19 +49,28 @@ async def token_stream_handler(message: str) -> AsyncGenerator[str, None]:
                                  FOOTER: [5-10 words]
                                 ),  
                             you generate the content on a particular topic in markdown format, 
+                            you don't generate any other format then below describe (not even extra symbols), 
                             you don't generate any other thing like (here is your presentation)
                             here is a example of how you will generate content: 
-                            
-                            --- 
-                            PAGE: SSS <page nunmber> EEE 
-                            TITLE: SSS <this is example title> EEE 
-                            DESCRIPTION: SSS <This is the short decription> EEE  
-                            BODY: SSS <this is the body of the **content** which will be in markdown format> EEE
-                            FOOTER: SSS <this is short footer which includes the text which supports the description> EEE
-                            
-                            also make sure to add: 
-                                - 'SSS' starting of every component 
-                                - 'EEE' at end of every component.
+                            RESPONSE: 
+                                --- 
+                                PAGE: SSS <page nunmber> EEE 
+                                TITLE: SSS <this is example title> EEE 
+                                DESCRIPTION: SSS <This is the short decription> EEE  
+                                BODY: SSS <this is the body of the **content** which will be in markdown format> EEE
+                                FOOTER: SSS <this is short footer which includes the text which supports the description> EEE
+                                --- 
+                                PAGE: SSS <page nunmber> EEE 
+                                TITLE: SSS <this is example title> EEE 
+                                DESCRIPTION: SSS <This is the short decription> EEE  
+                                BODY: SSS <this is the body of the **content** which will be in markdown format> EEE
+                                FOOTER: SSS <this is short footer which includes the text which supports the description> EEE
+                                .
+                                .
+                                .
+                                also make sure to add: 
+                                    - 'SSS' starting of every component 
+                                    - 'EEE' at end of every component.
                         """
             ),
         HumanMessage(content=message),

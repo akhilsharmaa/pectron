@@ -1,38 +1,46 @@
 import React, { useState } from "react";
 import { Stage, Layer, Star, Text } from 'react-konva';
+import { v4 as uuidv4 } from "uuid"; // Install with `npm install uuid`
 
 const CANVAS_HEIGHT = 1080/3; 
 const CANVAS_WIDTH  = 1920/3; 
 
 const App = () => {
-  const [question, setQuestion] = useState(""); // State for user input
+  const [question, setQuestion] = useState("Tourism in kolkata"); // State for user input
   const [components, setComponents] = useState([]); // Array to hold dynamic components
   const [isGenerating, setIsGenerating] = useState(false); // State to disable button while generating
+  const [currentParagraph, setCurrentParagraph] = useState(""); // State to disable button while generating
+  
+  var keyCounter = 0;
 
   // Function to add a new text component
   const addTextComponent = (text) => {
     const newComponent = (
-      <div key={`text-${components.length}`} className="dynamic-component">
+      <div key={`text-${keyCounter}`} className="dynamic-component">
         <p>{text}</p>
       </div>
     );
     setComponents((prev) => [...prev, newComponent]);
+    keyCounter += 1; // Increment the counter
   };
+ 
+  const addTextToLastComponent = (text) => {
+    const paragraphs = document.querySelectorAll("p");
+
+    // Check if there are any <p> elements and set text for the last one
+    if (paragraphs.length > 0) {
+      paragraphs[paragraphs.length - 1].textContent = text;
+    }
+  }  
 
   const getLastThreeSubstring = (str) => {
       return str.substring(str.length-3, str.length); 
   }
 
-  // Function to add a divider component
-  const addDivider = () => {
-    const newComponent = <hr key={`divider-${components.length}`} />;
-    setComponents((prev) => [...prev, newComponent]);
-  };
-
   const addNewStageComponent = () => {
     
       const newComponent = (
-            <div key={`divider-${components.length}`} 
+            <div key={`divider-${keyCounter}`} 
                 className="stage-canvas"> 
                 <Stage 
                       width={CANVAS_WIDTH} 
@@ -47,6 +55,7 @@ const App = () => {
             </div>)
 
       setComponents((prev) => [...prev, newComponent]);
+      keyCounter += 1; // Increment the counter
   }
 
   let paragraph = ""; // Temporary variable to store streaming paragraph
@@ -68,25 +77,27 @@ const App = () => {
 
     // Listen for messages from the server
     eventSource.onmessage = (event) => {
-      const token = event.data; // Current token sent by the server
+          const token = event.data; // Current token sent by the server
+          console.log(token);
+           
+          setCurrentParagraph((prevParagraph) => {
+              const updatedParagraph = prevParagraph + token;
 
+              const command = getLastThreeSubstring(updatedParagraph); 
 
-      // console.log(paragraph.substring(-10, 2));
-      const command = getLastThreeSubstring(paragraph); 
-      console.log(paragraph);
-      
+              if (command === "---" && token !== "") {
+                addNewStageComponent(); // Add a new stage component when "---" is received
+              } else if (command === "SSS") {
+                return ""; // Reset paragraph for a new block
+              } else if (command === "EEE") {
+                addTextComponent("");
+                return ""; // Reset paragraph for a new block
+              }
 
-      if (command === "---") {
-        // addDivider(); // Add a divider when "---" is received
-        addNewStageComponent();
-      } else if (command === "SSS") {
-        paragraph = "";  
-      } else if (command === "EEE") {
-        addTextComponent(paragraph);  
-        paragraph = ""; // Reset paragraph for a new block
-      } 
-      
-      paragraph += token; 
+              addTextToLastComponent(updatedParagraph);
+              return updatedParagraph; 
+          });
+
     };
 
     // Handle errors
