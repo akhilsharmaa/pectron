@@ -12,15 +12,71 @@ const App = () => {
   const [currentParagraph, setCurrentParagraph] = useState(""); // State to disable button while generating
   
   var keyCounter = 0;
+  var canAddNewPage = true; 
+
+  const [konvaComponents, setKonvaComponents] = useState([
+    {"texts": [
+      {
+        id: 1,
+        x: 10, // Random x position
+        y: 20, // Random y position
+        text: "This is text 1", // Dynamic text content
+        fontSize: 20,
+        fill: 'black',
+      }, 
+      {
+        id: 1,
+        x: 20, // Random x position
+        y: 40, // Random y position
+        text: "This is text 2", // Dynamic text content
+        fontSize: 20,
+        fill: 'black',
+      }
+    ]}, 
+    {"texts": [
+      {
+        id: 1,
+        x: 10, // Random x position
+        y: 20, // Random y position
+        text: "This is text 1", // Dynamic text content
+        fontSize: 20,
+        fill: 'black',
+      }, 
+      {
+        id: 1,
+        x: 20, // Random x position
+        y: 40, // Random y position
+        text: `"This is text 2"`, // Dynamic text content
+        fontSize: 20,
+        fill: 'black',
+      }
+    ]}
+  ]);
+  
 
   // Function to add a new text component
   const addTextComponent = (text) => {
-    const newComponent = (
-      <div key={`text-${keyCounter}`} className="dynamic-component">
-        <p>{text}</p>
-      </div>
-    );
-    setComponents((prev) => [...prev, newComponent]);
+
+    // setComponents((prev) => [...prev, newTextComponent]);
+    setKonvaComponents((prv) => {
+        var lastKonvaComponents = prv[prv.length-1]; 
+        
+        const lastTextYposition = lastKonvaComponents.texts[lastKonvaComponents.texts.length-1].y; 
+        const lastTextXposition = lastKonvaComponents.texts[lastKonvaComponents.texts.length-1].x; 
+
+        const newTextComponent = {
+          id: 1,
+          x: 10, // Random x position
+          y: lastTextYposition + 10, // Random y position
+          text: "",
+          fontSize: 20,
+          fill: "black"
+        }
+
+        lastKonvaComponents.texts.push(newTextComponent); 
+        return [...prv, lastKonvaComponents]; 
+    }); 
+
     keyCounter += 1; // Increment the counter
   };
  
@@ -31,16 +87,33 @@ const App = () => {
     if (paragraphs.length > 0) {
       paragraphs[paragraphs.length - 1].textContent = text;
     }
+
+    setKonvaComponents((prv) => {
+
+        var lastKonvaComponents = prv[prv.length-1]; 
+        // var lastTextEle = lastKonvaComponents.texts[lastKonvaComponents.texts.length-1]; 
+        
+        const numOfKonvaTextInLastComponent = lastKonvaComponents.texts.length; 
+
+        console.log("numOfKonvaTextInLastComponent: ", numOfKonvaTextInLastComponent);
+        console.log("lastKonvaComponents: ", lastKonvaComponents.texts[numOfKonvaTextInLastComponent-1]);
+
+
+        lastKonvaComponents.texts[numOfKonvaTextInLastComponent-1].text =  text;
+
+        return [...prv]; 
+        // return [...prv, lastTextEle]; 
+    })
   }  
 
   const getLastThreeSubstring = (str) => {
-      return str.substring(str.length-3, str.length); 
+      return str.substring(str.length-3, str.length);
   }
 
   const addNewStageComponent = () => {
     
       const newComponent = (
-            <div key={`divider-${keyCounter}`} 
+            <div key={`divider-${keyCounter++}`} 
                 className="stage-canvas"> 
                 <Stage 
                       width={CANVAS_WIDTH} 
@@ -54,11 +127,9 @@ const App = () => {
                 </Stage>
             </div>)
 
-      setComponents((prev) => [...prev, newComponent]);
-      keyCounter += 1; // Increment the counter
+      setComponents((prev) => [...prev, newComponent]); 
   }
  
-  var canAddNewPage = true; 
 
   // Function to handle the "Ask" button click
   const handleAsk = () => { 
@@ -101,7 +172,7 @@ const App = () => {
               }
 
               addTextToLastComponent(updatedParagraph);
-              return updatedParagraph; 
+              return updatedParagraph;
           });
 
     };
@@ -137,18 +208,27 @@ const App = () => {
         <div className="components-container">{components}</div>
       </div>
 
-
-      {/* <div className="stage-canvas"> 
-        <Stage width={CANVAS_WIDTH}
-              height={CANVAS_HEIGHT}
-              backgroundColor="000sdd">
-                <Layer>
-                  <Text 
-                      text="Try to drag a star"
-                      draggable="true" />
-                </Layer>
-        </Stage>
-      </div> */}
+      {
+          konvaComponents.map((texts) => (
+            <Stage width={CANVAS_WIDTH}
+                height={CANVAS_HEIGHT}
+                key={`stage-${keyCounter++}`}
+                className="stage-canvas">
+                  <Layer > 
+                    {texts.texts.map((text) => (
+                      <Text
+                        key={text.id}
+                        x={text.x}
+                        y={text.y}
+                        text={text.text}
+                        fontSize={text.fontSize}
+                        fill={text.fill}
+                      />
+                    ))}
+                  </Layer>
+            </Stage> 
+          ))
+      }
 
  
     </div>
