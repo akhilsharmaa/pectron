@@ -46,9 +46,20 @@ async def token_stream_handler(message: str) -> AsyncGenerator[str, None]:
                                  DESCRIPTION: [10-20 words], 
                                  BODY: [20-35 words], 
                                  FOOTER: [5-10 words]
-                                )
+                                ),  
                             you generate the content on a particular topic in markdown format, 
                             you don't generate any other thing like (here is your presentation)
+                            here is a example of how you will generate content: 
+                            
+                            --- 
+                            PAGE: #start [X of Y pages] #end 
+                            TITLE: #start [this is example title] #end 
+                            DESCRIPTION: #start [This is the short decription] #end  
+                            BODY: #start [this is the body of the **content** which will be in markdown format] #end
+                            FOOTER: #start [this is short footer which includes the text which supports the description] #end
+                            --- 
+                            
+                            also make sure to add '#start ' and '#end ' on every component.  
                         """
             ),
         HumanMessage(content=message),
