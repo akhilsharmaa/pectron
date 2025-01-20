@@ -15,42 +15,6 @@ const App = () => {
   var canAddNewPage = true; 
 
   const [konvaComponents, setKonvaComponents] = useState([
-    {"texts": [
-      {
-        id: 1,
-        x: 10, // Random x position
-        y: 20, // Random y position
-        text: "This is text 1", // Dynamic text content
-        fontSize: 20,
-        fill: 'black',
-      }, 
-      {
-        id: 1,
-        x: 20, // Random x position
-        y: 40, // Random y position
-        text: "This is text 2", // Dynamic text content
-        fontSize: 20,
-        fill: 'black',
-      }
-    ]}, 
-    {"texts": [
-      {
-        id: 1,
-        x: 10, // Random x position
-        y: 20, // Random y position
-        text: "This is text 1", // Dynamic text content
-        fontSize: 20,
-        fill: 'black',
-      }, 
-      {
-        id: 1,
-        x: 20, // Random x position
-        y: 40, // Random y position
-        text: `"This is text 2"`, // Dynamic text content
-        fontSize: 20,
-        fill: 'black',
-      }
-    ]}
   ]);
   
 
@@ -64,17 +28,20 @@ const App = () => {
 
         // Clone the previous components to avoid mutating state
         const lastComponent = updatedComponents[updatedComponents.length - 1];
+        const lastPy = lastComponent.texts[lastComponent.texts.length-1]?.y; 
+        console.log("lastComponent ", lastComponent);
+        console.log("lastPy ", lastPy);
+        
 
         const newTextComponent = {
-            id: prev.length,
+            id: keyCounter++,
             x: 10, // Random x position
-            y:  10, // Random y position
-            text: `this is text `,
+            y: keyCounter++, // Random y position
+            text: ``,
             width: `${CANVAS_WIDTH-2}`, 
             fontSize: 20,
             fill: "black"
         }
- 
 
         // Add the new text to the last component's texts array immutably
         const updatedLastComponent = {
@@ -82,6 +49,7 @@ const App = () => {
           texts: [...lastComponent.texts, newTextComponent],
         };
  
+
         updatedComponents[updatedComponents.length - 1] = updatedLastComponent;
         return updatedComponents;
     }); 
@@ -95,25 +63,14 @@ const App = () => {
       const updatedComponents = [...prev];
 
       // Clone the previous components to avoid mutating state
-      const lastComponent = updatedComponents[updatedComponents.length - 1];
+      var lastComponent = updatedComponents[updatedComponents.length - 1]; 
 
-      const newTextComponent = {
-          id: prev.length,
-          x: 10, // Random x position
-          y:  10, // Random y position
-          text: text, 
-          width: `${CANVAS_WIDTH-2}`, 
-          fontSize: 20,
-          fill: "black"
+      const size = lastComponent.texts.length; 
+      if(size >= 1){ 
+        lastComponent.texts[size-1].text = text; 
       }
 
-
-      const updatedLastComponent = {
-        ...lastComponent,
-        texts: [...lastComponent.texts, newTextComponent],
-      };
-
-      updatedComponents[updatedComponents.length - 1] = updatedLastComponent;
+      updatedComponents[updatedComponents.length - 1] = lastComponent;
       return updatedComponents;
     }); 
   }  
@@ -123,25 +80,10 @@ const App = () => {
   }
 
   const addNewStageComponent = () => {
-    
-      const newComponent = (
-            <div key={`divider-${keyCounter++}`} 
-                className="stage-canvas"> 
-                <Stage 
-                      width={CANVAS_WIDTH} 
-                      height={CANVAS_HEIGHT}
-                      backgroundColor="000sdd">
-                        <Layer>
-                            <Text 
-                              text={currentParagraph}>
-                            </Text> 
-                        </Layer>
-                </Stage>
-            </div>)
-
-      
-
-      setComponents((prev) => [...prev, newComponent]); 
+    setKonvaComponents((prev) => {
+        const update = [...prev, {"texts": []}];  
+        return update; 
+    }); 
   }
  
 
@@ -172,32 +114,18 @@ const App = () => {
               const command = getLastThreeSubstring(updatedParagraph); 
 
               if (command === "---" && canAddNewPage) {
-
-                console.log("before konvaComponents: ", konvaComponents);
-
-
-                setKonvaComponents((prev) => {
-                    const update = [...prev, {"texts": []}]; 
-                    console.log("before 2 konvaComponents: ", update);
-                    
-                    return update; 
-                }); 
-
-                console.log("token: ", token);
-                console.log("command: ", command);
-                console.log("updatedParagraph: ", updatedParagraph);
-                console.log("after konvaComponents: ", konvaComponents);
-
+                addNewStageComponent(); 
                 canAddNewPage = false;
 
               } else if (command === "SSS") {
-                return ""; // Reset paragraph for a new block
+                return "";  
+
               } else if (command === "EEE") {
                 addTextComponent("");
                 canAddNewPage = true;
-                return ""; // Reset paragraph for a new block
-              }
+                return "";  
 
+              }
               addTextToLastComponent(updatedParagraph);
               return updatedParagraph;
           });
@@ -248,6 +176,7 @@ const App = () => {
                         x={text.x}
                         y={text.y}
                         text={text.text}
+                        width={text.width}
                         fontSize={text.fontSize}
                         fill={text.fill}
                       />
