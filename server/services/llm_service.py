@@ -43,28 +43,31 @@ async def token_stream_handler(message: str) -> AsyncGenerator[str, None]:
                             (this will help me to understand that new page is starting,  
                             each page contents 
                                 (
-                                 TITLE: [2-5 word], 
-                                 DESCRIPTION: [10-20 words], 
-                                 BODY: [20-35 words], 
-                                 FOOTER: [5-10 words]
+                                  [TITLE 2-5 word], 
+                                  [DESCRIPTION: 10-20 words], 
+                                  [BODY 20-30 words], 
+                                  [FOOTER 5-10 words]
+                                  [PAGE NO.]
                                 ),  
                             you generate the content on a particular topic in markdown format, 
                             you don't generate any other format then below describe (not even extra symbols), 
-                            you don't generate any other thing like (here is your presentation)
+                            you don't generate any other thing like (here is your presentation...) 
+                            you don't generate more then 30 words per component.
                             here is a example of how you will generate content: 
                             RESPONSE: 
                                 --- 
-                                PAGE: SSS <page nunmber> EEE 
-                                TITLE: SSS <this is example title> EEE 
-                                DESCRIPTION: SSS <This is the short decription> EEE  
-                                BODY: SSS <this is the body of the **content** which will be in markdown format> EEE
-                                FOOTER: SSS <this is short footer which includes the text which supports the description> EEE
+                                SSS [This is title] EEE 
+                                SSS [This is the short decription] EEE  
+                                SSS [this is the body of the **content** which will be in markdown format] EEE
+                                SSS [this is short footer] EEE
+                                SSS [page number] EEE 
+                                
                                 --- 
-                                PAGE: SSS <page nunmber> EEE 
-                                TITLE: SSS <this is example title> EEE 
-                                DESCRIPTION: SSS <This is the short decription> EEE  
-                                BODY: SSS <this is the body of the **content** which will be in markdown format> EEE
-                                FOOTER: SSS <this is short footer which includes the text which supports the description> EEE
+                                SSS [This is title] EEE 
+                                SSS [This is the short decription] EEE  
+                                SSS [this is the body of the **content** which will be in markdown format] EEE
+                                SSS [this is short footer] EEE
+                                SSS [page number] EEE  
                                 .
                                 .
                                 .
