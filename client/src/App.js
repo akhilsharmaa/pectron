@@ -7,7 +7,6 @@ const CANVAS_WIDTH  = 1920/3;
 
 const App = () => {
   const [question, setQuestion] = useState("Tourism in kolkata"); // State for user input
-  const [components, setComponents] = useState([]); // Array to hold dynamic components
   const [isGenerating, setIsGenerating] = useState(false); // State to disable button while generating
   const [currentParagraph, setCurrentParagraph] = useState(""); // State to disable button while generating
   
@@ -27,19 +26,16 @@ const App = () => {
         const updatedComponents = [...prev];
 
         // Clone the previous components to avoid mutating state
-        const lastComponent = updatedComponents[updatedComponents.length - 1];
-        const lastPy = lastComponent.texts[lastComponent.texts.length-1]?.y; 
-        console.log("lastComponent ", lastComponent);
-        console.log("lastPy ", lastPy);
-        
-
+        const lastComponent = updatedComponents[updatedComponents.length - 1]; 
+        const lastPy = lastComponent.texts[lastComponent.texts.length-1]?.y ?? 0; 
+ 
         const newTextComponent = {
             id: keyCounter++,
-            x: 10, // Random x position
-            y: keyCounter++, // Random y position
+            x: 30, // Random x position
+            y: lastPy + 30, // Random y position
             text: ``,
-            width: `${CANVAS_WIDTH-2}`, 
-            fontSize: 20,
+            width: `${CANVAS_WIDTH-40}`, 
+            fontSize: 16,
             fill: "black"
         }
 
@@ -95,9 +91,8 @@ const App = () => {
       return;
     } 
 
-    setIsGenerating(true); // Disable button
-    setComponents([]); // Clear previous components
-
+    setIsGenerating(true); // Disable button 
+    
     const eventSource = new EventSource(
       `http://localhost:8000/llm/ask?question=${encodeURIComponent(question)}`
     );
@@ -125,8 +120,10 @@ const App = () => {
                 canAddNewPage = true;
                 return "";  
 
+              }else {
+                addTextToLastComponent(updatedParagraph);
               }
-              addTextToLastComponent(updatedParagraph);
+              
               return updatedParagraph;
           });
 
@@ -157,11 +154,7 @@ const App = () => {
       />
       <button onClick={handleAsk} disabled={isGenerating}>
         {isGenerating ? "Generating..." : "Ask"}
-      </button>
-      <div style={{ marginTop: "20px" }}>
-        <h2>Response:</h2>
-        <div className="components-container">{components}</div>
-      </div>
+      </button> 
 
       {
           konvaComponents.map((texts) => (
@@ -176,7 +169,8 @@ const App = () => {
                         x={text.x}
                         y={text.y}
                         text={text.text}
-                        width={text.width}
+                        lineHeight={1.25}
+                        width={CANVAS_WIDTH-50}  
                         fontSize={text.fontSize}
                         fill={text.fill}
                       />
