@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Stage, Layer, Star, Text } from 'react-konva';
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import './App.css'
  
 const CANVAS_HEIGHT = 1080/3; 
@@ -22,7 +23,7 @@ const App = () => {
     
     setKonvaComponents((prev) => {
       
-        console.log("konvaComponent: ", prev); 
+        // console.log("konvaComponent: ", prev); 
 
         const updatedComponents = [...prev];
 
@@ -55,6 +56,7 @@ const App = () => {
 
   const addTextToLastComponent = (text:string) => { 
 
+
     setKonvaComponents((prev) => {
         
       const updatedComponents = [...prev];
@@ -76,7 +78,32 @@ const App = () => {
       return str.substring(str.length-3, str.length);
   }
 
+  const changeFontOfFirstComponent = () => {
+ 
+
+      setKonvaComponents((prev) => { 
+
+              if(prev.length >= 1){
+                
+                    const updatedComponents = prev;
+                    var lastComponent = prev[prev.length - 1]; 
+                    
+                    lastComponent.texts[0].fontSize=18; 
+                    lastComponent.texts[1].fontSize=18; 
+
+                    updatedComponents[updatedComponents.length-1] = lastComponent; 
+
+                    return updatedComponents; 
+              }
+
+              return prev; 
+      })
+  }
+   
   const addNewStageComponent = () => {
+ 
+    // changeFontOfFirstComponent(); 
+
     setKonvaComponents((prev) => {
         const update = [...prev, {"texts": []}];  
         return update; 
@@ -145,17 +172,23 @@ const App = () => {
 
   return (
     <div>
-      <h1>LLM Streaming Response</h1>
-      <input
-        type="text"
-        placeholder="Enter your question"
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        style={{ marginRight: "10px", width: "300px" }}
-      />
-      <Button onClick={handleAsk} disabled={isGenerating}>
-        {isGenerating ? "Generating..." : "Ask"}
-      </Button> 
+      <h1>Pectron</h1> 
+
+      <div className='wrap flex mt-10 mb-10'>
+        <Input
+          type="text"
+          placeholder="Enter the topic"
+          value={question} 
+          onChange={(e) => setQuestion(e.target.value)}
+          style={{ marginRight:"1rem", padding: "10px 20px", fontSize:"24px" }}
+        />
+
+        <Button onClick={handleAsk} disabled={isGenerating}
+            style={{padding: "23px 20px", fontSize:"24px" }}>
+          {isGenerating ? "Generating..." : "Create"}
+        </Button> 
+      </div>
+
 
       {
           konvaComponents.map((texts) => (
