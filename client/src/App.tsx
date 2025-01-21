@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from 'react'
 import { Stage, Layer, Star, Text } from 'react-konva';
-import { v4 as uuidv4 } from "uuid"; // Install with `npm install uuid`
-
+import './App.css'
+ 
 const CANVAS_HEIGHT = 1080/3; 
 const CANVAS_WIDTH  = 1920/3; 
 
@@ -17,7 +17,7 @@ const App = () => {
   ]);
   
 
-  const addTextComponent = (text) => { 
+  const addTextComponent = () => { 
     
     setKonvaComponents((prev) => {
       
@@ -52,7 +52,7 @@ const App = () => {
   }; 
 
 
-  const addTextToLastComponent = (text) => { 
+  const addTextToLastComponent = (text:string) => { 
 
     setKonvaComponents((prev) => {
         
