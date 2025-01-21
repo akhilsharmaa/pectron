@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Stage, Layer, Star, Text } from 'react-konva';
+import { Button } from "@/components/ui/button"
 import './App.css'
  
 const CANVAS_HEIGHT = 1080/3; 
@@ -32,7 +33,7 @@ const App = () => {
         const newTextComponent = {
             id: keyCounter++,
             x: 30, // Random x position
-            y: lastPy + 30, // Random y position
+            y: lastPy + 36, // Random y position
             text: ``,
             width: `${CANVAS_WIDTH-40}`, 
             fontSize: 16,
@@ -116,7 +117,7 @@ const App = () => {
                 return "";  
 
               } else if (command === "EEE") {
-                addTextComponent("");
+                addTextComponent();
                 canAddNewPage = true;
                 return "";  
 
@@ -152,9 +153,9 @@ const App = () => {
         onChange={(e) => setQuestion(e.target.value)}
         style={{ marginRight: "10px", width: "300px" }}
       />
-      <button onClick={handleAsk} disabled={isGenerating}>
+      <Button onClick={handleAsk} disabled={isGenerating}>
         {isGenerating ? "Generating..." : "Ask"}
-      </button> 
+      </Button> 
 
       {
           konvaComponents.map((texts) => (

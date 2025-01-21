@@ -46,8 +46,7 @@ async def token_stream_handler(message: str) -> AsyncGenerator[str, None]:
                                   [TITLE 2-5 word], 
                                   [DESCRIPTION: 10-20 words], 
                                   [BODY 20-30 words], 
-                                  [FOOTER 5-10 words]
-                                  [PAGE NO.]
+                                  [FOOTER 5-10 words] 
                                 ),  
                             you generate the content on a particular topic in markdown format, 
                             you don't generate any other format then below describe (not even extra symbols), 
@@ -59,15 +58,13 @@ async def token_stream_handler(message: str) -> AsyncGenerator[str, None]:
                                 SSS [This is title] EEE 
                                 SSS [This is the short decription] EEE  
                                 SSS [this is the body of the **content** which will be in markdown format] EEE
-                                SSS [this is short footer] EEE
-                                SSS [page number] EEE 
+                                SSS [this is short footer] EEE 
                                 
                                 --- 
                                 SSS [This is title] EEE 
                                 SSS [This is the short decription] EEE  
                                 SSS [this is the body of the **content** which will be in markdown format] EEE
-                                SSS [this is short footer] EEE
-                                SSS [page number] EEE  
+                                SSS [this is short footer] EEE 
                                 .
                                 .
                                 .
