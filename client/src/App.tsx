@@ -1,9 +1,12 @@
 import { useState } from 'react'
-import { Stage, Layer, Star, Text } from 'react-konva';
+import { Stage, Layer, Rect, Text, Image as KonvaImage } from 'react-konva';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import './App.css'
- 
+import useImage from 'use-image';
+
+import React, { Component } from 'react';
+
 const CANVAS_HEIGHT = 1080/3; 
 const CANVAS_WIDTH  = 1920/3; 
 
@@ -21,8 +24,7 @@ const App = () => {
 
   const addTextComponent = () => { 
     
-    setKonvaComponents((prev) => {
-      
+    setKonvaComponents((prev) => { 
         // console.log("konvaComponent: ", prev); 
 
         const updatedComponents = [...prev];
@@ -38,7 +40,7 @@ const App = () => {
             text: ``,
             width: `${CANVAS_WIDTH-40}`, 
             fontSize: 16,
-            fill: "black"
+            fill: "white"
         }
 
         // Add the new text to the last component's texts array immutably
@@ -74,9 +76,17 @@ const App = () => {
     }); 
   }  
 
-  const getLastThreeSubstring = (str) => {
+  const getLastThreeSubstring = (str:string) => {
       return str.substring(str.length-3, str.length);
   }
+
+
+  // the first very simple and recommended way:
+  const RenderKonvaImage = () => {
+    const [image] = useImage('./image2.jpg');
+    return <KonvaImage image={image} />;
+  };
+
 
   const changeFontOfFirstComponent = () => {
  
@@ -191,23 +201,26 @@ const App = () => {
 
 
       {
-          konvaComponents.map((texts) => (
+          konvaComponents.map((pages) => (
             <Stage width={CANVAS_WIDTH}
                 height={CANVAS_HEIGHT}
                 key={`stage-${keyCounter++}`}
                 className="stage-canvas">
-                  <Layer > 
-                    {texts.texts.map((text) => (
-                      <Text
-                        key={text.id}
-                        x={text.x}
-                        y={text.y}
-                        text={text.text}
-                        lineHeight={1.25}
-                        width={CANVAS_WIDTH-50}  
-                        fontSize={text.fontSize}
-                        fill={text.fill}
-                      />
+                  
+                  <Layer >
+                    {/* <RenderKonvaImage/> */}
+                    {pages.texts.map((text) => ( 
+                        <Text
+                          key={text.id}
+                          x={text.x}
+                          y={text.y}
+                          text={text.text}
+                          draggable={true}
+                          lineHeight={1.25}
+                          width={text.width}  
+                          fontSize={text.fontSize}
+                          fill={text.fill}
+                        /> 
                     ))}
                   </Layer>
             </Stage> 
