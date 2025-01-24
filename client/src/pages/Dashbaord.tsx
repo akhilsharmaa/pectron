@@ -4,9 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import '../App.css'
 import useImage from 'use-image';
+import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner"
+
   
-const CANVAS_HEIGHT = 1080/3; 
-const CANVAS_WIDTH  = 1920/3; 
+const CANVAS_HEIGHT = 1080/2; 
+const CANVAS_WIDTH  = 1920/2; 
+const FONTSIZE  = 22; 
+const CAVASMARGIN = 80; 
 
 const Dashboard = () => {
 
@@ -23,7 +28,7 @@ const Dashboard = () => {
 
   const addTextComponent = () => { 
     
-    setKonvaComponents((prev) => { 
+    setKonvaComponents((prev) => {
         // console.log("konvaComponent: ", prev); 
 
         const updatedComponents = [...prev];
@@ -34,11 +39,11 @@ const Dashboard = () => {
  
         const newTextComponent = {
             id: keyCounter++,
-            x: 30, // Random x position
+            x: CAVASMARGIN,  
             y: lastPy + 36, // Random y position
             text: ``,
-            width: `${CANVAS_WIDTH-40}`, 
-            fontSize: 16,
+            width: `${CANVAS_WIDTH-(2*CAVASMARGIN)}`, 
+            fontSize: FONTSIZE,
             fill: "white"
         }
 
@@ -128,11 +133,17 @@ const Dashboard = () => {
       return;
     } 
 
-    setIsGenerating(true); // Disable button 
-    
-    const eventSource = new EventSource(
-      `http://localhost:8000/llm/ask?question=${encodeURIComponent(question)}`
-    );
+      
+      const eventSource = new EventSource(
+        `http://localhost:8000/llm/ask?question=${encodeURIComponent(question)}`
+      );
+       
+      setIsGenerating(true); // Disable button 
+ 
+      console.log(eventSource);
+      if(eventSource){
+        console.log("Unauthursed");
+      }
 
     // Listen for messages from the server
     eventSource.onmessage = (event) => {
@@ -167,8 +178,13 @@ const Dashboard = () => {
     };
 
     // Handle errors
-    eventSource.onerror = () => {
-      console.error("Error with the SSE connection.");
+    eventSource.onerror = (error) => {
+      console.error("Error with the SSE connection."); 
+
+      toast("Something Went Wrong", {
+        description: "Please login before"
+      })
+
       setIsGenerating(false);
       eventSource.close();
     };
@@ -224,8 +240,9 @@ const Dashboard = () => {
                   </Layer>
             </Stage> 
           ))
-      }
+      } 
 
+      <Toaster/>
  
     </div>
   );
