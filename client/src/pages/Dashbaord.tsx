@@ -6,7 +6,7 @@ import '../App.css'
 import useImage from 'use-image';
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
-
+import {BASE_URL} from "../config"
   
 const CANVAS_HEIGHT = 1080/2; 
 const CANVAS_WIDTH  = 1920/2; 
@@ -135,7 +135,7 @@ const Dashboard = () => {
 
       
       const eventSource = new EventSource(
-        `http://localhost:8000/llm/ask?question=${encodeURIComponent(question)}`
+        `${BASE_URL}/llm/ask?question=${encodeURIComponent(question)}`
       );
        
       setIsGenerating(true); // Disable button 
