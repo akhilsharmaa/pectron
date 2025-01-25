@@ -2,6 +2,7 @@ from fastapi import Depends, FastAPI
 from .router import users, auth, llm
 from .services.database import create_tables
 from fastapi.middleware.cors import CORSMiddleware
+from .utils.logger import logger
 
 app = FastAPI()
  
@@ -22,6 +23,8 @@ create_tables()
 
 @app.get("/")
 async def root():
+    logger.info(f"New Request at '/' ")
+
     return {
                 "message": "welcome to pectron", 
                 "description": "create presentation in second with ai, enabling ai." 
