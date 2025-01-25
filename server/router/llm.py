@@ -6,7 +6,7 @@ from fastapi_limiter.depends import RateLimiter
 from ..services.database import db_dependency
 from ..models.users import Users
 from ..utils.users import get_current_user
-
+from ..utils.logger import logger
 
 router = APIRouter(
     prefix="/llm",
@@ -15,5 +15,6 @@ router = APIRouter(
 )
 
 @router.get("/ask")
-async def askllm(question: str, current_user: Users = Depends(get_current_user)): 
+async def askllm(question: str, token: str, db: db_dependency): 
+    current_user = get_current_user(db, token=token) 
     return ask_question(question)

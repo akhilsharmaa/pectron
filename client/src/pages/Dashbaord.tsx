@@ -128,14 +128,15 @@ const Dashboard = () => {
   // Function to handle the "Ask" button click
   const handleAsk = () => { 
 
-    if (!question.trim()) {
-      alert("Please enter a question.");
-      return;
-    } 
+      if (!question.trim()) {
+        alert("Please enter a question.");
+        return;
+      } 
 
-      
+      const token = localStorage.getItem("token");
+
       const eventSource = new EventSource(
-        `${BASE_URL}/llm/ask?question=${encodeURIComponent(question)}`
+        `${BASE_URL}/llm/ask?question=${encodeURIComponent(question)}&token=${token}`
       );
        
       setIsGenerating(true); // Disable button 

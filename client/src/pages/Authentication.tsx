@@ -81,17 +81,34 @@ const Authentication = () => {
             method: 'POST', 
             body: formData
           };
+ 
+          try {
+ 
+            const response =  await fetch(`${BASE_URL}/token`, requestOptions); 
+            const result = await response.json();  
+ 
+            if(response.status == 200){
 
-          await fetch(`${BASE_URL}/token`, requestOptions)
-              .then(response => {
-                  toast("Success Login", {
-                    description: "enjoy creating the presentations..."
-                  })
-              })
-              .then(data => {
-                  console.log(data);
+                localStorage.setItem("token", result.access_token);
 
-              });
+                toast("Success Login", {
+                  description: "enjoy creating the presentations..."
+                })
+            }
+
+          } catch (error) {
+            
+            toast("Failed to login", { 
+            }) 
+          }
+          
+
+          // await fetch(`${BASE_URL}/token`, requestOptions)
+          //     .then(response => {
+          //     })
+          //     .then(data => {
+          //         console.log(data);
+          //     });
     }
 
 
@@ -114,14 +131,14 @@ const Authentication = () => {
                       </CardContent>
                        
                           <Input
-                              id='email-input-register' 
+                              id='username-input-signin' 
                               className='mt-2'
-                              type='email'
-                              placeholder='Email'
-                              onChange={(e) => setEmail(e.target.value)}>
+                              type='username'
+                              placeholder='Username'
+                              onChange={(e) => setUsername(e.target.value)}>
                           </Input> 
                           <Input
-                              id='password-input-register' 
+                              id='password-input-signin' 
                               className='mt-2'
                               type='password'
                               placeholder='Password'
