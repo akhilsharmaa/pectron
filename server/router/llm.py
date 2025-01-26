@@ -1,4 +1,5 @@
 from fastapi import APIRouter , Depends
+from typing import Annotated
 from pydantic import BaseModel  
 from ..services.llm_service import ask_question
 from sqlalchemy.orm import Session
@@ -16,5 +17,6 @@ router = APIRouter(
 
 @router.get("/ask")
 async def askllm(question: str, token: str, db: db_dependency): 
-    current_user = get_current_user(db, token=token) 
+    current_user = get_current_user(db, token=token)  
     return ask_question(question)
+
