@@ -239,8 +239,10 @@ const Dashboard = () => {
       <Carousel setApi={setApi} 
             plugins={[
               Autoplay({
-                delay: 2000,
-              }),
+                delay: 100, 
+                stopOnLastSnap: true, 
+                snapped: true
+              },),
             ]}
             >
         <CarouselContent>
