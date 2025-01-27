@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { React, useState, useEffect} from 'react'
 import { Stage, Layer, Rect, Text, Image as KonvaImage } from 'react-konva';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -7,7 +7,11 @@ import useImage from 'use-image';
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 import {BASE_URL} from "../config"
-  
+import Autoplay from "embla-carousel-autoplay"
+import { Carousel,CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel"; 
+import { type CarouselApi } from "@/components/ui/carousel"
+
+
 const CANVAS_HEIGHT = 1080/2; 
 const CANVAS_WIDTH  = 1920/2; 
 const FONTSIZE  = 22; 
@@ -18,13 +22,29 @@ const Dashboard = () => {
   const [question, setQuestion] = useState("Tourism in kolkata"); // State for user input
   const [isGenerating, setIsGenerating] = useState(false); // State to disable button while generating
   const [currentParagraph, setCurrentParagraph] = useState(""); // State to disable button while generating
+  const [konvaComponents, setKonvaComponents] = useState([]);
   
+  const [api, setApi] = useState<CarouselApi>()
+  const [current, setCurrent] = useState(0)
+  const [count, setCount] = useState(0)
+ 
   var keyCounter = 0;
   var canAddNewPage = true; 
 
-  const [konvaComponents, setKonvaComponents] = useState([
-  ]);
-  
+  useEffect(() => {
+    if (!api) {
+      return
+    }
+ 
+    setCount(api.scrollSnapList().length)
+    setCurrent(api.selectedScrollSnap() + 1)
+ 
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1)
+    })
+  }, [api])
+
+
 
   const addTextComponent = () => { 
     
@@ -215,34 +235,47 @@ const Dashboard = () => {
         </Button> 
       </div>
 
+  
+      <Carousel setApi={setApi} 
+            plugins={[
+              Autoplay({
+                delay: 2000,
+              }),
+            ]}
+            >
+        <CarouselContent>
+            { konvaComponents.map((pages) => (
+              <CarouselItem>
+              <Stage width={CANVAS_WIDTH}
+                  height={CANVAS_HEIGHT}
+                  key={`stage-${keyCounter++}`}
+                  className="stage-canvas">
+                    
+                    <Layer >
+                      {/* <RenderKonvaImage/> */}
+                      {pages.texts.map((text) => ( 
+                          <Text
+                            key={text.id}
+                            x={text.x}
+                            y={text.y}
+                            text={text.text}
+                            draggable={true}
+                            lineHeight={1.25}
+                            width={text.width}  
+                            fontSize={text.fontSize}
+                            fill={text.fill}
+                          /> 
+                      ))}
+                    </Layer>
+                </Stage> 
+                </CarouselItem> 
+              ))
+            } 
 
-      {
-          konvaComponents.map((pages) => (
-            <Stage width={CANVAS_WIDTH}
-                height={CANVAS_HEIGHT}
-                key={`stage-${keyCounter++}`}
-                className="stage-canvas">
-                  
-                  <Layer >
-                    {/* <RenderKonvaImage/> */}
-                    {pages.texts.map((text) => ( 
-                        <Text
-                          key={text.id}
-                          x={text.x}
-                          y={text.y}
-                          text={text.text}
-                          draggable={true}
-                          lineHeight={1.25}
-                          width={text.width}  
-                          fontSize={text.fontSize}
-                          fill={text.fill}
-                        /> 
-                    ))}
-                  </Layer>
-            </Stage> 
-          ))
-      } 
+        </CarouselContent>
+      </Carousel>
 
+      
       <Toaster/>
  
     </div>
