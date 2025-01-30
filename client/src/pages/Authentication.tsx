@@ -47,15 +47,9 @@ const Authentication = () => {
  
               const response = await fetch(`${BASE_URL}/users/register`, requestOptions); 
               const result = await response.json(); 
-
-              console.log(result);  
-
-              if(response.status == 200){
-
-                toast("Failed to register",  {
-                  description: `${result.detail}`
-                })
-                
+ 
+              if(response.status == 200){ 
+                toast("Registered successfully.",  {}) 
               }else {
                 toast("Failed to register",  {
                   description: `${result.detail}`

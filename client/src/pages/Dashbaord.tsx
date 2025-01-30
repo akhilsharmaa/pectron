@@ -62,7 +62,7 @@ const Dashboard = () => {
             x: CAVASMARGIN,  
             y: lastPy + 36, // Random y position
             text: ``,
-            width: `${CANVAS_WIDTH-(2*CAVASMARGIN)}`, 
+            width: `${CANVAS_WIDTH/2}`, 
             fontSize: FONTSIZE,
             fill: "white"
         }
@@ -107,8 +107,17 @@ const Dashboard = () => {
 
   // the first very simple and recommended way:
   const RenderKonvaImage = () => {
-    const [image] = useImage('./image2.jpg');
-    return <KonvaImage image={image} />;
+    const [image] = useImage('https://static.independent.co.uk/2024/06/04/15/newFile-1.jpg');
+    return <KonvaImage 
+                image={image} 
+                x={(CANVAS_WIDTH*0.65)} 
+                y={(CANVAS_HEIGHT*0.25)}
+                height={300}
+                width={300}
+                cornerRadius={10} 
+                cropX={300}
+                cropY={100}
+                draggable={true} />;
   };
 
 
@@ -251,10 +260,8 @@ const Dashboard = () => {
               <Stage width={CANVAS_WIDTH}
                   height={CANVAS_HEIGHT}
                   key={`stage-${keyCounter++}`}
-                  className="stage-canvas">
-                    
+                  className="stage-canvas"> 
                     <Layer >
-                      {/* <RenderKonvaImage/> */}
                       {pages.texts.map((text) => ( 
                           <Text
                             key={text.id}
@@ -268,6 +275,8 @@ const Dashboard = () => {
                             fill={text.fill}
                           /> 
                       ))}
+                      <RenderKonvaImage/>
+
                     </Layer>
                 </Stage> 
                 </CarouselItem> 
