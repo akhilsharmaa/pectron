@@ -9,6 +9,7 @@ from ..models.users import Users
 from ..utils.users import get_current_user
 from ..utils.logger import logger
 from ..services.summary_service import get_summary
+from ..services.search_image import search_image
 
 router = APIRouter(
     prefix="/llm",
@@ -29,4 +30,4 @@ async def getimage(
                 db: db_dependency,
                 current_user: Annotated[Users, Depends(get_current_user)]): 
     
-    return get_summary(content); 
+    return search_image(content); 
