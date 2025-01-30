@@ -30,4 +30,5 @@ async def getimage(
                 db: db_dependency,
                 current_user: Annotated[Users, Depends(get_current_user)]): 
     
-    return search_image(content); 
+    return search_image(
+                get_summary(content)); 
