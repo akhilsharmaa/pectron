@@ -8,6 +8,7 @@ from ..services.database import db_dependency
 from ..models.users import Users
 from ..utils.users import get_current_user
 from ..utils.logger import logger
+from ..services.summary_service import get_summary
 
 router = APIRouter(
     prefix="/llm",
@@ -20,3 +21,12 @@ async def askllm(question: str, token: str, db: db_dependency):
     current_user = get_current_user(db, token=token)  
     return ask_question(question)
 
+
+
+@router.post("/fetchimage")
+async def getimage(
+                content: str, 
+                db: db_dependency,
+                current_user: Annotated[Users, Depends(get_current_user)]): 
+    
+    return get_summary(content); 

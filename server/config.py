@@ -14,3 +14,5 @@ DATABASE_URL = "postgresql://pectron_owner:U2PaSndB6TIo@ep-silent-glade-a5a4lkh6
 # JWT CONFIGURATION 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+MODEL_NAME = "llama3.2"

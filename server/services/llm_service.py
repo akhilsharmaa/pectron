@@ -96,3 +96,4 @@ def ask_question(question: str):
         token_stream_handler(question),
         media_type="text/event-stream",
     )
+    
