@@ -10,6 +10,7 @@ import {BASE_URL} from "../config"
 import Autoplay from "embla-carousel-autoplay"
 import { Carousel,CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel"; 
 import { type CarouselApi } from "@/components/ui/carousel"
+import {getAllStringContent } from "../utils/tools"
 
 
 const CANVAS_HEIGHT = 1080/2; 
@@ -23,6 +24,8 @@ const Dashboard = () => {
   const [isGenerating, setIsGenerating] = useState(false); // State to disable button while generating
   const [currentParagraph, setCurrentParagraph] = useState(""); // State to disable button while generating
   const [konvaComponents, setKonvaComponents] = useState([]);
+  const [konvaComponentsImages, setkonvaComponentsImages] = useState([]);
+  const [totalPageCount, setTotalPageCount] = useState(0);
   
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
@@ -43,6 +46,11 @@ const Dashboard = () => {
       setCurrent(api.selectedScrollSnap() + 1)
     })
   }, [api])
+
+
+  useEffect(() => { 
+      addNewImageToLastPage(); 
+  }, [totalPageCount])
 
 
 
@@ -106,8 +114,10 @@ const Dashboard = () => {
 
 
   // the first very simple and recommended way:
-  const RenderKonvaImage = () => {
-    const [image] = useImage('https://static.independent.co.uk/2024/06/04/15/newFile-1.jpg');
+  const RenderKonvaImage = (props) => {
+    console.log("imageUrl: ", props.imageUrl); // TODO: REMOVE COMMENT 
+    
+    const [image] = useImage(props.imageUrl);
     return <KonvaImage 
                 image={image} 
                 x={(CANVAS_WIDTH*0.65)} 
@@ -148,10 +158,65 @@ const Dashboard = () => {
     // changeFontOfFirstComponent(); 
 
     setKonvaComponents((prev) => {
-        const update = [...prev, {"texts": []}];  
+        const update = [...prev, {"texts": []}];
+        setTotalPageCount((prev) => prev+1); 
         return update; 
     }); 
   }
+
+  const addNewImageToLastPage = async () => {
+    
+    if (konvaComponents.length >= 2) {
+
+        let lastComponent = konvaComponents[konvaComponents.length - 2];
+        const totalTextContent = getAllStringContent(lastComponent.texts);
+ 
+        try { 
+  
+            const token = localStorage.getItem("token");
+
+            const requestOptions = {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    "content": totalTextContent,  
+                  }
+                ),
+            };
+
+            const response = await fetch(`${BASE_URL}/llm/fetchimage`, requestOptions); 
+            const result = await response.json(); 
+
+            console.log("result: ", result[0].imageUrl);
+
+            lastComponent.image = result[0].imageUrl; 
+
+            console.log(lastComponent);
+            
+
+            if (response.status === 200) { 
+                toast("Registered successfully.", {});
+            } else {
+                toast("Failed to register", {
+                    description: `${result.detail}`,
+                });
+            }
+
+            // After API call, update state
+            setKonvaComponents((prev) => [...prev]); 
+
+        } catch (err) {
+            console.error(err);
+            toast("Something went wrong! Please try again later", {
+                description: `Failed to register!`,
+            });
+        }
+    }
+};
+
  
 
   // Function to handle the "Ask" button click
@@ -189,7 +254,6 @@ const Dashboard = () => {
               if (command === "---" && canAddNewPage) {
                 addNewStageComponent(); 
                 canAddNewPage = false;
-
               } else if (command === "SSS") {
                 return "";  
 
@@ -275,8 +339,12 @@ const Dashboard = () => {
                             fill={text.fill}
                           /> 
                       ))}
-                      <RenderKonvaImage/>
 
+                      {pages.image && 
+                          <RenderKonvaImage
+                          imageUrl={pages.image}
+                          />
+                      }
                     </Layer>
                 </Stage> 
                 </CarouselItem> 

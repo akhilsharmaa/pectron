@@ -30,7 +30,7 @@ def search_image(query: str):
     # TODO: remove dummy data and add actuall data. 
     return  [
   {
-    "title": "Sri Lanka | History, Map, Flag, Population, Capital, & Facts ...",
+    "title": "DUMMY DATA BROOOOOO | History, Map, Flag, Population, Capital, & Facts ...",
     "imageUrl": "https://cdn.britannica.com/14/4414-050-18764C01/Sri-Lanka-boundaries-map-cities-locator.jpg",
     "imageWidth": 1600,
     "imageHeight": 1331,
@@ -44,7 +44,7 @@ def search_image(query: str):
     "position": 1
   },
   {
-    "title": "Sri Lanka, an Island Nation That Is Best Savored Slowly - The New ...",
+    "title": "DUMMY DATA BROOOOOO   That Is Best Savored Slowly - The New ...",
     "imageUrl": "https://static01.nyt.com/images/2019/02/03/travel/03frugal-srilanka01/merlin_148552275_74c0d250-949c-46e0-b8a1-e6d499e992cf-superJumbo.jpg",
     "imageWidth": 2048,
     "imageHeight": 1365,
