@@ -11,6 +11,8 @@ def imageSearchOnSerper(query: str):
         "q": query
     })
     
+    #TODO: CHANGE THE API KEY & GET FROM THE .env file. 
+    
     headers = {
         'X-API-KEY': '855664a0927de766b7c21dd7a7069436c8ff4944',
         'Content-Type': 'application/json'

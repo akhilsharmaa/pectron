@@ -21,14 +21,15 @@ router = APIRouter(
 async def askllm(question: str, token: str, db: db_dependency): 
     current_user = get_current_user(db, token=token)  
     return ask_question(question)
-
-
-
+ 
+class ContentBase(BaseModel): 
+    content: str 
+                
 @router.post("/fetchimage")
 async def getimage(
-                content: str, 
+                content: ContentBase, 
                 db: db_dependency,
                 current_user: Annotated[Users, Depends(get_current_user)]): 
     
     return search_image(
-                get_summary(content)); 
+                get_summary(content.content)); 
