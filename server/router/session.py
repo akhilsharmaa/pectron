@@ -6,6 +6,8 @@ from ..models.users import Users
 from ..models.session import SessionModel
 from ..utils.users import get_current_user
 from ..utils.logger import logger
+from fastapi.responses import JSONResponse
+
 
 router = APIRouter(
     prefix="/session",
@@ -46,8 +48,9 @@ async def askllm(
         db.rollback()   
         
         
+        
 @router.post("/getall")
-async def askllm( db: db_dependency,
+async def getall( db: db_dependency,
                 current_user: Annotated[Users, Depends(get_current_user)]): 
 
     try:
@@ -59,3 +62,29 @@ async def askllm( db: db_dependency,
     except Exception as e:
         logger.error(e);
         
+
+
+
+
+@router.post("/getsessioncontent")
+async def getsessioncontent(sessionId: str,
+                 db: db_dependency,
+                current_user: Annotated[Users, Depends(get_current_user)]): 
+
+    try:
+        result = db.query(SessionModel).filter(
+            SessionModel.sessionId == sessionId,
+            SessionModel.username == current_user.username
+        ).first()
+                
+        if result:        
+            return result
+        
+    except Exception as e:
+        logger.error(f"Error fetching session content: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+    return JSONResponse(
+        status_code=401,
+        content={"message": "You are trying to access an unreachable page."}
+    )
