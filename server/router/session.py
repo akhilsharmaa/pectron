@@ -45,3 +45,17 @@ async def askllm(
         logger.error(e);  
         db.rollback()   
         
+        
+@router.post("/getall")
+async def askllm( db: db_dependency,
+                current_user: Annotated[Users, Depends(get_current_user)]): 
+
+    try:
+        result = db.query(SessionModel).filter(
+            SessionModel.username == current_user.username).all();  
+        print(result)
+        return result; 
+    
+    except Exception as e:
+        logger.error(e);
+        
