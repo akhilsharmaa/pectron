@@ -12,6 +12,7 @@ import { Carousel,CarouselContent, CarouselItem, CarouselNext, CarouselPrevious}
 import { type CarouselApi } from "@/components/ui/carousel"
 import {getAllStringContent } from "../utils/tools"
 import {isAuthenticated } from "../utils/auth"
+import {SessionsComponents } from "../components/SessionsComponents"
 
 
 const CANVAS_HEIGHT = 1080/2; 
@@ -309,6 +310,7 @@ const Dashboard = () => {
         </Button> 
       </div>
 
+      <SessionsComponents/>
   
       <Carousel setApi={setApi} 
             plugins={[

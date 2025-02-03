@@ -9,8 +9,6 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/auth" element={<Authentication />}/>
-
-
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Dashboard />} />
         </Route>
