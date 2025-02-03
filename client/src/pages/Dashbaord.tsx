@@ -12,6 +12,7 @@ import { Carousel,CarouselContent, CarouselItem, CarouselNext, CarouselPrevious}
 import { type CarouselApi } from "@/components/ui/carousel"
 import {getAllStringContent } from "../utils/tools"
 import {isAuthenticated } from "../utils/auth"
+import {Navbar } from "../components/Navbar"
 import {SessionsComponents } from "../components/SessionsComponents"
 import { saveKonvaComponentsJson } from '@/utils/session';
 
@@ -292,7 +293,11 @@ const Dashboard = () => {
  
   return (
     <div>
-      <h1>Pectron</h1> 
+      <Navbar />
+      <div className="flex items-center justify-center space-x-3 rtl:space-x-reverse">
+        <img src="./logo.png" className="h-12" alt="Flowbite Logo" />
+        <h1>Pectron</h1> 
+      </div>
 
       <div className='wrap flex mt-10 mb-10'>
         <Input

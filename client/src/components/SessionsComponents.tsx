@@ -50,9 +50,7 @@ export const SessionsComponents = () => {
         <div>
             {
                 isLoading ? "Loading..." : 
-                <div>
-                    {
-                    }
+                <div> 
                 </div>
                 
             }

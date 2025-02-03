@@ -7,6 +7,7 @@ from ..services.database import db_dependency
 from ..models.users import Users
 from ..utils.passwords import get_password_hash
 from ..utils.users import get_current_user
+from fastapi.responses import JSONResponse
 
 router = APIRouter(
     prefix="/users",
@@ -32,6 +33,7 @@ async def create_user(user: UserBase, db: db_dependency):
             first_name=user.first_name, 
             last_name=user.last_name, 
             password=get_password_hash(user.password), 
+            credits=40,
         )
 
     try:
@@ -64,5 +66,16 @@ async def create_user(user: UserBase, db: db_dependency):
 
 
 @router.post("/me", response_model=UserBase)
-async def read_users_me(db: db_dependency, current_user: Users = Depends(get_current_user)):
-    return current_user
+async def read_users_me(db: db_dependency, current_user: Users = Depends(get_current_user)): 
+    print(current_user.credits)
+         
+    return JSONResponse(
+        status_code=200,
+        content= {
+            "username": current_user.username,
+            "email": current_user.email, 
+            "first_name": current_user.first_name, 
+            "last_name": current_user.last_name, 
+            "credits": current_user.credits, 
+        }
+    )     

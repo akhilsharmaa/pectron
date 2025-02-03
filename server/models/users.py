@@ -9,3 +9,4 @@ class Users(Base):
     first_name = Column(String)
     last_name = Column(String)
     password = Column(String)
+    credits = Column(Integer)

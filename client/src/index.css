@@ -154,3 +154,13 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+
+nav{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  color: white;
+  background-color: #f6f6f6;
+}
