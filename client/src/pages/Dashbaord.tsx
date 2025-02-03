@@ -11,6 +11,7 @@ import Autoplay from "embla-carousel-autoplay"
 import { Carousel,CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel"; 
 import { type CarouselApi } from "@/components/ui/carousel"
 import {getAllStringContent } from "../utils/tools"
+import {isAuthenticated } from "../utils/auth"
 
 
 const CANVAS_HEIGHT = 1080/2; 
