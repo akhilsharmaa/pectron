@@ -13,6 +13,7 @@ import { type CarouselApi } from "@/components/ui/carousel"
 import {getAllStringContent } from "../utils/tools"
 import {isAuthenticated } from "../utils/auth"
 import {SessionsComponents } from "../components/SessionsComponents"
+import { saveKonvaComponentsJson } from '@/utils/session';
 
 
 const CANVAS_HEIGHT = 1080/2; 
@@ -25,8 +26,7 @@ const Dashboard = () => {
   const [question, setQuestion] = useState("Tourism in kolkata"); // State for user input
   const [isGenerating, setIsGenerating] = useState(false); // State to disable button while generating
   const [currentParagraph, setCurrentParagraph] = useState(""); // State to disable button while generating
-  const [konvaComponents, setKonvaComponents] = useState([]);
-  const [konvaComponentsImages, setkonvaComponentsImages] = useState([]);
+  const [konvaComponents, setKonvaComponents] = useState([]); 
   const [totalPageCount, setTotalPageCount] = useState(0);
   
   const [api, setApi] = useState<CarouselApi>()
@@ -117,7 +117,7 @@ const Dashboard = () => {
 
   // the first very simple and recommended way:
   const RenderKonvaImage = (props) => {
-    console.log("imageUrl: ", props.imageUrl); // TODO: REMOVE COMMENT 
+    // console.log("imageUrl: ", props.imageUrl); // TODO: REMOVE COMMENT 
     
     const [image] = useImage(props.imageUrl);
     return <KonvaImage 
@@ -192,7 +192,7 @@ const Dashboard = () => {
             const response = await fetch(`${BASE_URL}/llm/fetchimage`, requestOptions); 
             const result = await response.json(); 
 
-            console.log("result: ", result[0].imageUrl);
+            // console.log("result: ", result[0].imageUrl);
 
             lastComponent.image = result[0].imageUrl; 
 
@@ -236,12 +236,7 @@ const Dashboard = () => {
       );
        
       setIsGenerating(true); // Disable button 
- 
-      console.log(eventSource);
-      if(eventSource){
-        console.log("Unauthursed");
-      }
-
+   
     // Listen for messages from the server
     eventSource.onmessage = (event) => {
           const token = event.data; // Current token sent by the server
@@ -291,6 +286,10 @@ const Dashboard = () => {
     };
   };
 
+  const handleSaveSession = () => {
+    saveKonvaComponentsJson(question, konvaComponents);
+  }
+ 
   return (
     <div>
       <h1>Pectron</h1> 
@@ -356,8 +355,12 @@ const Dashboard = () => {
 
         </CarouselContent>
       </Carousel>
-
-      
+      <button 
+          type="button" 
+          className="text-white bg-green-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
+          onClick={handleSaveSession}>
+        SAVE
+      </button>
       <Toaster/>
  
     </div>

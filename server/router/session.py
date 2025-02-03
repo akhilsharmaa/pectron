@@ -17,6 +17,7 @@ router = APIRouter(
   
 class SessionBase(BaseModel):
     sessionId: str
+    title: str
     body: str
 
 
@@ -30,6 +31,7 @@ async def askllm(
             sessionId=session.sessionId,
             username=current_user.username, 
             body=session.body,
+            title=session.title,
         )
   
     try:
@@ -45,8 +47,14 @@ async def askllm(
     except Exception as e:
         
         logger.error(e);  
-        db.rollback()   
-        
+        db.rollback()
+         
+    return JSONResponse(
+        status_code=400,
+        content={
+                "message": "Something went wrong."
+        }
+    )     
         
         
 @router.post("/getall")
