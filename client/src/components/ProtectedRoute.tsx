@@ -20,9 +20,7 @@ const ProtectedRoute = () => {
             }
         }; 
 
-        const response = await fetch(`${BASE_URL}/users/me`, requestOptions);
-        console.log(response);
-        
+        const response = await fetch(`${BASE_URL}/users/me`, requestOptions); 
 
         if (response.status === 200) {
           setIsAuthenticated(true);

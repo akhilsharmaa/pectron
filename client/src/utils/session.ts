@@ -4,12 +4,16 @@ import { toast } from "sonner"
 
 export const saveKonvaComponentsJson = async (title : string, jsonBody) => {
 
+    const generateRandomSessionId = () => {
+        return String(Math.floor(100000 + Math.random() * 900000)); 
+    }
+
     try { 
   
         const token = localStorage.getItem("token");
 
         const body = {
-            "sessionId": "string", 
+            "sessionId": generateRandomSessionId(), 
             "title": title, 
             "body": JSON.stringify(jsonBody)
         }

@@ -1,5 +1,6 @@
 import { useState, useEffect} from 'react' 
 import { BASE_URL } from '../config'
+import { SessionCard } from './ui/SessionCard';
 
 export const SessionsComponents = () => {
 
@@ -25,13 +26,14 @@ export const SessionsComponents = () => {
 
             const response = await fetch(`${BASE_URL}/session/getall`, requestOptions); 
             const result = await response.json(); 
-            
-            console.log(result); 
+             
             setLoading(false);
 
             // // After API call, update state
-            // setKonvaComponents((prev) => [...prev]); 
+            setSessionComponents(result); 
+            console.log(sessionComponents);
             
+
         } catch (err) {
             setLoading(false);
             console.error(err); 
@@ -41,7 +43,7 @@ export const SessionsComponents = () => {
     }
     
     useEffect(() => {
-        getAllSession();
+        getAllSession(); 
     }, []);
 
     return (
@@ -50,10 +52,18 @@ export const SessionsComponents = () => {
                 isLoading ? "Loading..." : 
                 <div>
                     {
-                        <p>{sessionComponents}</p>
                     }
                 </div>
+                
             }
+            
+            <div  className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            { 
+                sessionComponents.map((session) => (
+                    SessionCard(session)
+                ))
+            }
+            </div>
         </div> 
     )
 }
