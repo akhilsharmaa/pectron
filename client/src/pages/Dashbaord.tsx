@@ -241,7 +241,7 @@ const Dashboard = () => {
     // Listen for messages from the server
     eventSource.onmessage = (event) => {
           const token = event.data; // Current token sent by the server
-          // console.log(token);
+          console.log(token);
            
           setCurrentParagraph((prevParagraph) => {
 
