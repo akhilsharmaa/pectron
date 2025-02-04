@@ -1,3 +1,6 @@
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 from fastapi import Depends, FastAPI
 from .router import users, auth, llm, session
 from .services.database import create_tables
@@ -5,7 +8,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from .utils.logger import logger
 
 app = FastAPI()
- 
 
 app.add_middleware(
     CORSMiddleware,

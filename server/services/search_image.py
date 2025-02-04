@@ -1,5 +1,6 @@
 import requests
 import json
+from ..config import SERPER_API_KEY
 
 # searching from https://serper.dev/playground api provider. 
 def imageSearchOnSerper(query: str):
@@ -10,22 +11,20 @@ def imageSearchOnSerper(query: str):
     payload = json.dumps({
         "q": query
     })
-    
-    #TODO: CHANGE THE API KEY & GET FROM THE .env file. 
-    
+     
     headers = {
-        'X-API-KEY': '855664a0927de766b7c21dd7a7069436c8ff4944',
+        'X-API-KEY': SERPER_API_KEY, 
         'Content-Type': 'application/json'
     }
  
     response = requests.request("POST", url, headers=headers, data=payload)
-    result = json.loads(response.text) 
+    result = json.loads(response.text)
     images = result["images"]; 
     
     return images[:10]; 
      
 def search_image(query: str):
-    # return imageSearchOnSerper(query=query);
+    return imageSearchOnSerper(query=query);
     
     # TODO: remove dummy data and add actuall data. 
     return  [
