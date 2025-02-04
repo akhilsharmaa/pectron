@@ -1,4 +1,5 @@
 from fastapi import APIRouter , Depends
+from fastapi.responses import JSONResponse
 from typing import Annotated
 from pydantic import BaseModel  
 from ..services.llm_service import ask_question
@@ -19,8 +20,24 @@ router = APIRouter(
 
 @router.get("/ask")
 async def askllm(question: str, token: str, db: db_dependency): 
+    
+    
     current_user = get_current_user(db, token=token)  
-    return ask_question(question)
+    user = db.query(Users).filter(
+        Users.username == current_user.username).first();  
+    
+    if user.credits >= 4: 
+        
+        # updating creding points (Decrementing the credit points). 
+        user.credits -= 4;  
+        db.commit()
+        
+        return ask_question(question)
+    
+    return JSONResponse(
+        status_code=400,
+        content={"message": "Your credit points are empty."}
+    )  
  
 class ContentBase(BaseModel): 
     content: str 

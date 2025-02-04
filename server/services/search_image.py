@@ -24,7 +24,7 @@ def imageSearchOnSerper(query: str):
     return images[:10]; 
      
 def search_image(query: str):
-    return imageSearchOnSerper(query=query);
+    # return imageSearchOnSerper(query=query);
     
     # TODO: remove dummy data and add actuall data. 
     return  [
