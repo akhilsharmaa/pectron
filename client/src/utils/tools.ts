@@ -1,7 +1,7 @@
-export const getAllStringContent = (arr) => {  
+export const getAllStringContent = (arr: Array<{"text":string}>) => {  
     
     let total = ""; 
-    arr.forEach((obj: string) => {
+    arr.forEach((obj: {"text": string}) => {
         total += obj.text; 
     });
 
