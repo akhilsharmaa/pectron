@@ -65,9 +65,21 @@ const Dashboard = () => {
         const updatedComponents = [...prev];
 
         // Clone the previous components to avoid mutating state
-        const lastComponent = updatedComponents[updatedComponents.length - 1]; 
+        const lastComponent: {"texts": Array<
+          {
+            "id": string, 
+            "x": number, 
+            "y": number,
+            "text": string, 
+            "width": number, 
+            "fontSize": number, 
+            "fill": string
+          }>, 
+          "image": string
+        } = updatedComponents[updatedComponents.length - 1]; 
         const lastPy = lastComponent.texts[lastComponent.texts.length-1]?.y ?? 0; 
  
+        
         const newTextComponent = {
             id: keyCounter++,
             x: CAVASMARGIN,  
@@ -376,4 +388,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;
