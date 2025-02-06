@@ -148,9 +148,14 @@ const Dashboard = () => {
     
     if (konvaComponents.length >= 2) {
 
-        let lastComponent = konvaComponents[konvaComponents.length - 2];
+        const lastComponent:{
+                  "image":string, 
+                  "texts": Array<{"text": string}>
+                } = konvaComponents[konvaComponents.length - 2];
+
         const totalTextContent = getAllStringContent(lastComponent.texts);
- 
+        console.log("totalTextContent:", totalTextContent);
+        
         try { 
   
             const token = localStorage.getItem("token");
@@ -196,7 +201,6 @@ const Dashboard = () => {
         }
     }
 };
-
  
 
   // Function to handle the "Ask" button click
