@@ -1,5 +1,5 @@
-import { React, useState, useEffect} from 'react'
-import { Stage, Layer, Rect, Text, Image as KonvaImage } from 'react-konva';
+import { useState, useEffect} from 'react'
+import { Stage, Layer, Text, Image as KonvaImage } from 'react-konva';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import '../App.css'
@@ -8,10 +8,9 @@ import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 import {BASE_URL} from "../config"
 import Autoplay from "embla-carousel-autoplay"
-import { Carousel,CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel"; 
+import { Carousel,CarouselContent, CarouselItem} from "@/components/ui/carousel"; 
 import { type CarouselApi } from "@/components/ui/carousel"
-import {getAllStringContent } from "../utils/tools"
-import {isAuthenticated } from "../utils/auth"
+import {getAllStringContent } from "../utils/tools" 
 import {Navbar } from "../components/Navbar"
 import {SessionsComponents } from "../components/SessionsComponents"
 import { saveKonvaComponentsJson } from '@/utils/session';
@@ -34,8 +33,8 @@ const Dashboard = () => {
   const [current, setCurrent] = useState(0)
   const [count, setCount] = useState(0)
  
-  var keyCounter = 0;
-  var canAddNewPage = true; 
+  let keyCounter = 0;
+  let canAddNewPage = true; 
 
   useEffect(() => {
     if (!api) {
@@ -271,7 +270,7 @@ const Dashboard = () => {
 
     // Handle errors
     eventSource.onerror = (error) => {
-      console.error("Error with the SSE connection."); 
+      console.error("Error with the SSE connection: ", error); 
 
       toast("Something Went Wrong", {
         description: "Please login before"

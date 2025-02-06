@@ -2,7 +2,7 @@ import { json } from "node:stream/consumers";
 import { BASE_URL } from "../config";
 import { toast } from "sonner"
 
-export const saveKonvaComponentsJson = async (title : string, jsonBody) => {
+export const saveKonvaComponentsJson = async (title : string, jsonBody: object) => {
 
     const generateRandomSessionId = () => {
         return String(Math.floor(100000 + Math.random() * 900000)); 

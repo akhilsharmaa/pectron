@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {BASE_URL} from "../config" 
 
 const ProtectedRoute = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -36,7 +36,7 @@ const ProtectedRoute = () => {
     checkAuth();
   }, []);
 
-  if (isAuthenticated === null) {
+  if (!isAuthenticated) {
     return <h1>Loading...</h1>; // Show a loading indicator
   }
 

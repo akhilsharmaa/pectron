@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button"
 import '../App.css' 
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import axios from 'axios'
 import { toast } from "sonner"
 import { Toaster } from "@/components/ui/sonner"
 
@@ -90,8 +89,7 @@ const Authentication = () => {
                 })
             }
 
-          } catch (error) {
-            
+          } catch (error) { 
             toast("Failed to login", { 
             }) 
           }
