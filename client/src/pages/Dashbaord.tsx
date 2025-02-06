@@ -52,6 +52,7 @@ const Dashboard = () => {
 
   useEffect(() => { 
       addNewImageToLastPage(); 
+      console.log("count:", count, " current:", current, "currentParagraph:", currentParagraph);
   }, [totalPageCount])
 
 
@@ -95,10 +96,21 @@ const Dashboard = () => {
 
     setKonvaComponents((prev) => {
         
-      const updatedComponents = [...prev];
+      const updatedComponents:Array<{"texts": Array<
+        {
+          "id": string, 
+          "x": number, 
+          "y": number,
+          "text": string, 
+          "width": number, 
+          "fontSize": number, 
+          "fill": string
+        }>, 
+        "image": string
+      }> = [...prev];
 
       // Clone the previous components to avoid mutating state
-      var lastComponent = updatedComponents[updatedComponents.length - 1]; 
+      const lastComponent = updatedComponents[updatedComponents.length - 1]; 
 
       const size = lastComponent.texts.length; 
       if(size >= 1){ 
