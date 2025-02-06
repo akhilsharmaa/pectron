@@ -132,29 +132,7 @@ const Dashboard = () => {
                 draggable={true} />;
   };
 
-
-  const changeFontOfFirstComponent = () => {
  
-
-      setKonvaComponents((prev) => { 
-
-              if(prev.length >= 1){
-                
-                    const updatedComponents = prev;
-                    var lastComponent = prev[prev.length - 1]; 
-                    
-                    lastComponent.texts[0].fontSize=18; 
-                    lastComponent.texts[1].fontSize=18; 
-
-                    updatedComponents[updatedComponents.length-1] = lastComponent; 
-
-                    return updatedComponents; 
-              }
-
-              return prev; 
-      })
-  }
-   
   const addNewStageComponent = () => {
  
     // changeFontOfFirstComponent(); 
@@ -319,13 +297,24 @@ const Dashboard = () => {
             plugins={[
               Autoplay({
                 delay: 100, 
-                stopOnLastSnap: true, 
-                snapped: true
+                stopOnLastSnap: true
               },),
             ]}
             >
         <CarouselContent>
-            { konvaComponents.map((pages) => (
+            { konvaComponents.map((pages: 
+                    {"texts": Array<
+                      {
+                        "id": string, 
+                        "x": number, 
+                        "y": number,
+                        "text": string, 
+                        "width": number, 
+                        "fontSize": number, 
+                        "fill": string
+                      }>, 
+                      "image": string
+                    }, ) => (
               <CarouselItem>
               <Stage width={CANVAS_WIDTH}
                   height={CANVAS_HEIGHT}
