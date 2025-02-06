@@ -116,7 +116,7 @@ const Dashboard = () => {
 
 
   // the first very simple and recommended way:
-  const RenderKonvaImage = (props) => {
+  const RenderKonvaImage = (props: {"imageUrl": string}) => {
     // console.log("imageUrl: ", props.imageUrl); // TODO: REMOVE COMMENT 
     
     const [image] = useImage(props.imageUrl);
