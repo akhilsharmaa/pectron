@@ -45,9 +45,8 @@ const Dashboard = () => {
       const queryParams = new URLSearchParams(location.search);
       const sessionId:string = queryParams.get('sessionId');
       const result = await getSessionBody({"sessionId": sessionId});
-      console.log("result:::: ", result);
-
       setKonvaComponents(result);
+
   }
 
   useEffect(() => {
@@ -198,7 +197,6 @@ const Dashboard = () => {
                 } = konvaComponents[konvaComponents.length - 2];
 
         const totalTextContent = getAllStringContent(lastComponent.texts);
-        console.log("totalTextContent:", totalTextContent);
         
         try { 
   
