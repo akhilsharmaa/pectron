@@ -19,4 +19,4 @@ SERPER_API_KEY = os.environ.get("SERPER_API_KEY")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-MODEL_NAME = "llama3.2"
+MODEL_NAME = "deepseek-r1:1.5b"

@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react'
+import { useState, useEffect,} from 'react'
 import { Stage, Layer, Text, Image as KonvaImage } from 'react-konva';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,6 +14,8 @@ import {getAllStringContent } from "../utils/tools"
 import {Navbar } from "../components/Navbar"
 import {SessionsComponents } from "../components/SessionsComponents"
 import { saveKonvaComponentsJson } from '@/utils/session';
+import { useLocation } from 'react-router-dom';
+import { getSessionBody } from '@/utils/getSessionBody';
 
 
 const CANVAS_HEIGHT = 1080/2; 
@@ -33,8 +35,23 @@ const Dashboard = () => {
   const [current, setCurrent] = useState(0)
   const [count, setCount] = useState(0)
  
+  const location = useLocation();
+
   let keyCounter = 0;
   let canAddNewPage = true; 
+  
+  
+  useEffect(() => {
+    console.log("Fetching the ");
+    
+    const queryParams = new URLSearchParams(location.search);
+    const sessionId:string = queryParams.get('session'); // Retrieve the value of a specific query parameter
+    console.log(sessionId);
+
+    getSessionBody({"sessionId": sessionId});
+  
+  }, [location.search]);
+
 
   useEffect(() => {
     if (!api) {
@@ -246,7 +263,7 @@ const Dashboard = () => {
     // Listen for messages from the server
     eventSource.onmessage = (event) => {
           const token = event.data; // Current token sent by the server
-          console.log(token);
+          // console.log(token);
            
           setCurrentParagraph((prevParagraph) => {
 

@@ -9,7 +9,7 @@ export default function App() {
       <Routes>
         <Route path="/auth" element={<Authentication />}/>
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/app" element={<Dashboard />} />
         </Route>
       </Routes>
     </BrowserRouter>
