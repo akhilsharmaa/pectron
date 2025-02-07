@@ -17,6 +17,9 @@ export const saveKonvaComponentsJson = async (title : string, jsonBody: object) 
             "body": JSON.stringify(jsonBody)
         }
 
+        console.log("jsonBody::: ", jsonBody);
+        
+
         const requestOptions = {
             method: 'POST',
             headers: { 

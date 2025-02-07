@@ -2,7 +2,7 @@ import { BASE_URL } from "../config";
 
 export const getSessionBody = async (props: {"sessionId": string}) => {
   
-    try{ 
+    try{
             const token = localStorage.getItem("token");
 
             const requestOptions = {
@@ -17,14 +17,17 @@ export const getSessionBody = async (props: {"sessionId": string}) => {
             const response = await fetch(`${BASE_URL}/session/getsessioncontent?sessionId=${props.sessionId}`, requestOptions);  
             const result = await response.json();
             console.log(result);
+
+            
             
             if(response.status == 200){ 
-                return true;
-            } 
-
+                return JSON.parse(result.body);
+            }
+            return [];
+            
     }catch(err){
         console.error(err); 
     }
 
-    return false; 
+    return []; 
 }

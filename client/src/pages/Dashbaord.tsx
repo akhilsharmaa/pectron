@@ -39,18 +39,21 @@ const Dashboard = () => {
 
   let keyCounter = 0;
   let canAddNewPage = true; 
-  
-  
+
+  const addSessionIfProvided  = async () => {
+
+      const queryParams = new URLSearchParams(location.search);
+      const sessionId:string = queryParams.get('sessionId');
+      const result = await getSessionBody({"sessionId": sessionId});
+      console.log("result:::: ", result);
+
+      setKonvaComponents(result);
+  }
+
   useEffect(() => {
     console.log("Fetching the ");
-    
-    const queryParams = new URLSearchParams(location.search);
-    const sessionId:string = queryParams.get('session'); // Retrieve the value of a specific query parameter
-    console.log(sessionId);
-
-    getSessionBody({"sessionId": sessionId});
-  
-  }, [location.search]);
+    addSessionIfProvided();
+  }, []);
 
 
   useEffect(() => {
