@@ -16,9 +16,6 @@ export const getSessionBody = async (props: {"sessionId": string}) => {
         
             const response = await fetch(`${BASE_URL}/session/getsessioncontent?sessionId=${props.sessionId}`, requestOptions);  
             const result = await response.json();
-            console.log(result);
-
-            
             
             if(response.status == 200){ 
                 return JSON.parse(result.body);

@@ -15,10 +15,7 @@ export const saveKonvaComponentsJson = async (title : string, jsonBody: object) 
             "sessionId": generateRandomSessionId(), 
             "title": title, 
             "body": JSON.stringify(jsonBody)
-        }
-
-        console.log("jsonBody::: ", jsonBody);
-        
+        }        
 
         const requestOptions = {
             method: 'POST',
@@ -31,9 +28,7 @@ export const saveKonvaComponentsJson = async (title : string, jsonBody: object) 
 
         const response = await fetch(`${BASE_URL}/session/save`, requestOptions); 
         const result = await response.json(); 
- 
-        console.log(result);
-
+        
         if (response.status === 200) { 
             toast("Session saved Successfully. ", {});
         } else {

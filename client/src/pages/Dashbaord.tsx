@@ -13,6 +13,7 @@ import { type CarouselApi } from "@/components/ui/carousel"
 import {getAllStringContent } from "../utils/tools" 
 import {Navbar } from "../components/Navbar"
 import {SessionsComponents } from "../components/SessionsComponents"
+import {RenderKonvaImage } from "../components/ui/RenderKonvaImage"
 import { saveKonvaComponentsJson } from '@/utils/session';
 import { useLocation } from 'react-router-dom';
 import { getSessionBody } from '@/utils/getSessionBody';
@@ -58,7 +59,6 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    console.log("Fetching the ");
     addSessionIfProvided();
   }, []);
 
@@ -79,7 +79,7 @@ const Dashboard = () => {
 
   useEffect(() => { 
       addNewImageToLastPage(); 
-      console.log("count:", count, " current:", current, "currentParagraph:", currentParagraph);
+      // console.log("count:", count, " current:", current, "currentParagraph:", currentParagraph);
   }, [totalPageCount])
 
 
@@ -164,25 +164,6 @@ const Dashboard = () => {
   const getLastThreeSubstring = (str:string) => {
       return str.substring(str.length-3, str.length);
   }
-
-
-  // the first very simple and recommended way:
-  const RenderKonvaImage = (props: {"imageUrl": string}) => {
-    // console.log("imageUrl: ", props.imageUrl); // TODO: REMOVE COMMENT 
-    
-    const [image] = useImage(props.imageUrl);
-    return <KonvaImage 
-                image={image} 
-                x={(CANVAS_WIDTH*0.65)} 
-                y={(CANVAS_HEIGHT*0.25)}
-                height={300}
-                width={300}
-                cornerRadius={10} 
-                cropX={300}
-                cropY={100}
-                draggable={true} />;
-  };
-
  
   const addNewStageComponent = () => {
  
@@ -336,7 +317,7 @@ const Dashboard = () => {
             <h1>Pectron</h1> 
           </div>
 
-          <div className='wrap flex mt-10 w-full mb-10'>
+          <div className='wrap flex mt-10 mb-10'>
             <Input
               type="text"
               placeholder="Enter the topic"
@@ -353,8 +334,6 @@ const Dashboard = () => {
           <SessionsComponents/>
         </div>
       }
-
-
       <Carousel setApi={setApi} 
             plugins={[
               Autoplay({
@@ -399,7 +378,9 @@ const Dashboard = () => {
 
                       {pages.image && 
                           <RenderKonvaImage
-                          imageUrl={pages.image}
+                            imageUrl={pages.image}
+                            CANVAS_HEIGHT={CANVAS_HEIGHT}
+                            CANVAS_WIDTH={CANVAS_WIDTH}
                           />
                       }
                     </Layer>

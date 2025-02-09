@@ -32,7 +32,7 @@ export const SessionsComponents = () => {
 
             // // After API call, update state
             setSessionComponents(result); 
-            console.log(sessionComponents);
+            // console.log(sessionComponents);
             
 
         } catch (err) {

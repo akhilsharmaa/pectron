@@ -1,1 +1,1 @@
-export const BASE_URL:string = "https://pectron-server.onrender.com";
+export const BASE_URL:string = "http://localhost:8000";

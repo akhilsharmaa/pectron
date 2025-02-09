@@ -25,7 +25,6 @@ export const Navbar = () => {
             
                 const response = await fetch(`${BASE_URL}/users/me`, requestOptions);  
                 const result = await response.json();
-                console.log(result);
 
                 if(response.status == 200){  
                     setCredits(result.credits);
