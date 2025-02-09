@@ -30,6 +30,8 @@ const Dashboard = () => {
   const [currentParagraph, setCurrentParagraph] = useState(""); // State to disable button while generating
   const [konvaComponents, setKonvaComponents] = useState([]); 
   const [totalPageCount, setTotalPageCount] = useState(0);
+  const [fullSceenMode, setFullSceenMode] = useState(false);
+  
   
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
@@ -45,6 +47,12 @@ const Dashboard = () => {
       const queryParams = new URLSearchParams(location.search);
       const sessionId:string = queryParams.get('sessionId');
       const result = await getSessionBody({"sessionId": sessionId});
+ 
+
+      if(result.length){
+          setFullSceenMode(true);
+      } 
+
       setKonvaComponents(result);
 
   }
@@ -314,31 +322,38 @@ const Dashboard = () => {
     saveKonvaComponentsJson(question, konvaComponents);
   }
  
+  const toggleViewMode = () => {
+    setFullSceenMode(prev => !prev);
+  }
+
   return (
     <div>
-      <Navbar />
-      <div className="flex items-center justify-center space-x-3 rtl:space-x-reverse">
-        <img src="./logo.png" className="h-12" alt="Flowbite Logo" />
-        <h1>Pectron</h1> 
-      </div>
+      {!fullSceenMode && 
+        <div>
+          <Navbar />
+          <div className="flex items-center justify-center space-x-3 rtl:space-x-reverse">
+            <img src="./logo.png" className="h-12" alt="Flowbite Logo" />
+            <h1>Pectron</h1> 
+          </div>
 
-      <div className='wrap flex mt-10 mb-10'>
-        <Input
-          type="text"
-          placeholder="Enter the topic"
-          value={question} 
-          onChange={(e) => setQuestion(e.target.value)}
-          style={{ marginRight:"1rem", padding: "10px 20px", fontSize:"24px" }}
-        />
+          <div className='wrap flex mt-10 mb-10'>
+            <Input
+              type="text"
+              placeholder="Enter the topic"
+              value={question} 
+              onChange={(e) => setQuestion(e.target.value)}
+              style={{ marginRight:"1rem", padding: "10px 20px", fontSize:"24px" }}
+            />
 
-        <Button onClick={handleAsk} disabled={isGenerating}
-            style={{padding: "23px 20px", fontSize:"24px" }}>
-          {isGenerating ? "Generating..." : "Create"}
-        </Button> 
-      </div>
+            <Button onClick={handleAsk} disabled={isGenerating}
+                style={{padding: "23px 20px", fontSize:"24px" }}>
+              {isGenerating ? "Generating..." : "Create"}
+            </Button> 
+          </div>
 
-      <SessionsComponents/>
-  
+          <SessionsComponents/>
+        </div>
+      }
       <Carousel setApi={setApi} 
             plugins={[
               Autoplay({
@@ -401,7 +416,14 @@ const Dashboard = () => {
         SAVE
       </button>
       <Toaster/>
- 
+      
+      <button 
+          type="button" 
+          className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
+          onClick={toggleViewMode}>
+        View
+      </button>
+
     </div>
   );
 };
