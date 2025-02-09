@@ -1,6 +1,7 @@
 import { useState, useEffect} from 'react' 
 import { BASE_URL } from '../config'
 import { SessionCard } from './ui/SessionCard';
+import { Skeleton } from "@/components/ui/skeleton"
 
 export const SessionsComponents = () => {
 
@@ -49,10 +50,14 @@ export const SessionsComponents = () => {
     return (
         <div>
             {
-                isLoading ? "Loading..." : 
-                <div> 
+                isLoading &&
+                <div  className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <SkeletonBox/>
+                    <SkeletonBox/>
+                    <SkeletonBox/>
+                    <SkeletonBox/>
+                    <SkeletonBox/> 
                 </div>
-                
             }
             
             <div  className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -66,3 +71,11 @@ export const SessionsComponents = () => {
     )
 }
  
+const SkeletonBox = () => {
+    return (
+        <div className="w-54 bg-gray-100 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <Skeleton className="h-1 w-[200px] m-4 p-5" />
+            <Skeleton className="h-1 w-[250px] m-4 p-5" />
+        </div>
+    );
+}

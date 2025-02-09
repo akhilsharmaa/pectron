@@ -1,7 +1,7 @@
 export const SessionCard = (session: {"title":string, "sessionId": string}) => {
     const url = `app?sessionId=${session.sessionId}`;
     return (
-        <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-54 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
         <a href="#">
             <img className="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
         </a>

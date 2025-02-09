@@ -336,7 +336,7 @@ const Dashboard = () => {
             <h1>Pectron</h1> 
           </div>
 
-          <div className='wrap flex mt-10 mb-10'>
+          <div className='wrap flex mt-10 w-full mb-10'>
             <Input
               type="text"
               placeholder="Enter the topic"
@@ -350,10 +350,11 @@ const Dashboard = () => {
               {isGenerating ? "Generating..." : "Create"}
             </Button> 
           </div>
-
           <SessionsComponents/>
         </div>
       }
+
+
       <Carousel setApi={setApi} 
             plugins={[
               Autoplay({
